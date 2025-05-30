@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
+const validateUser = require('./validator');
+
 const users = [
   {
     id: "1",
@@ -11,12 +13,13 @@ const users = [
 ];
 
 // GET /users - Get all users
-router.get('/', (req, res) => {
+router.get('/', validateUser, (req, res) => {
   res.status(200).json(users);
 });
 
+
 // GET /users/:id – Get user by ID
-router.get('/:id', (req, res) => {
+router.get('/:id', validateUser,(req, res) => {
   const user = users.find(user => user.id === req.params.id);
   if (!user) {
     return res.status(404).json({ error: 'User not found' });
@@ -25,7 +28,7 @@ router.get('/:id', (req, res) => {
 });
 
 // POST /user – Add new user
-router.post('/', (req, res) => {
+router.post('/',validateUser, (req, res) => {
   const newUser = {
     id: (users.length + 1).toString(),
     ...req.body
